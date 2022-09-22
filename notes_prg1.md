@@ -40,6 +40,20 @@ code at once.*
 
 # C++
 
+## Synthaxe
+
+Pour inclure un module
+```C++
+#include <module>
+```
+
+**cout** -> character output
+**endl** -> standard end line
+
+## main
+Tout programme C++ contient une fonction main 
+
+## namespace
 Espace de nom, zone de déclaration d'identificateur
 namespace -> manière d'attribué une valeur sans conflit
 permet au compilateur d'attribuer un nom sans conflits
@@ -95,6 +109,21 @@ C++ a une seule fonction principale nommée **main**
 C++ est case sensitive
 
 
+# Pseudo Code
+-> Compréhension du problème 
+-> Description d'un algorithme en pseudo code
+-> Tester l'algorithme en pseudo code
+-> Écrire l'algorithme en code réel
+-> Compiler et tester le programme
+
+Le pseudo code peut aussi servir en équipe
+Il permet aux collaborateurs d'avoir une approche simple du code et de la problématique
+Il est plus simple de comprendre un pseudo code que du réel code
+
+
 # Suite cours
 Présentation point 6 de 01 Introduction pdf
+
+# Remarques 
+voir édition de lien 
 

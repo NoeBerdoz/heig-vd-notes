@@ -143,7 +143,7 @@ Elle peut être utilisé pour des déclarations de fonction
 L'avantage de le faire à la compilation et que le processeur
 doit réaliser le calcul une seule fois et non à chaque appel de constante comme à l'exécution avec const
 
-````
+```
 const int NUMBER_CONST = 5;
 
 constexpr int NUMBER_CONSTEXPR = 5;
@@ -169,6 +169,13 @@ int**
 double*
 
 ## Nombres :
+Les entiers peuvent être écrits dans 4 bases mais ils sont toujours stockés en binaire
+int decimal = 42;
+int binaire =  0b101010;
+int octal 042;
+int hexadecimal = 0x42
+
+
 1 bit est réservé pour le signe du nombre !
 
 Donc sur 32 bits, il il y a 2^31 possibilité et 1 bit réservés pour le moins
@@ -183,6 +190,7 @@ integer : 1
 ````C++
 int nombreN = 1 
 ````
+int permet à un range dee -2 à 2 milliards pour 4 octets en mémoire
 
 float : 1.1 -> nombre sur 32bit
 double : 1.0 -> nombre sur 64bit
@@ -211,7 +219,7 @@ donc pour réellement mettre un float il faut mettre un f à la fin du nombre
 ```C++
 float b = 1.1234567f;
 ```
-(à utiliser dans le cas où on n'a besoin d'optimiser les performances et la mémoire
+(à utiliser dans le cas où on a besoin d'optimiser les performances et la mémoire
 au maximum)
 
 le type int est signed par défault (-2 milliards jusqu à +2 milliards)
@@ -259,6 +267,11 @@ cout << a + a - a << " " << a - a + a << endl; // résultat sera inf 2e+38
 // car le a + a au début sort du scope de float, donc résultat infini - a = infini
 ````
 
+En ce qui concerne l'évaluation des expressions and et or (&& ||)  
+Elle se compile de gauche à droite et s'arrête **dès que possible**
+
+Donc (i++ || j++) si i++ true, j++ ne sera pas exécuté 
+
 ### Conversion nombre réel en nombre entier (Opérations explicites)
 La librairie <cmath> fournit les fonctions d'arrondi
   - trunc -> l'entier en tronquant après la virgule 
@@ -273,6 +286,8 @@ La librairie <cmath> fournit les fonctions d'arrondi
     
 
 # Opérations implicites
+Les conversions implicites sont gérés par le compilateur
+les conversions explicites sont gérés par le programmeur (cast)
 Lors d'une opération mélangeant des types, 
 il se passe une conversion arithmétique entre entiers, 
 exemple:
@@ -284,6 +299,12 @@ Si il y'a des mélanges entre signé et non signé,
 on prend unsigned car il permet plus de possibilités
 int, unsigned int -> unsigned int
 long, long long, unsigned long long -> unsigned long long
+
+Par contre si il y'a des opérations entre type signé supérieur au type non signé, 
+la conversion dépend des données concernant l'instruction, si les valeurs du unsigned sont représentable en 
+type signed, c'est le type signed qui primera
+unsigned int, long tel que int est compris dans long, -> long 
+unsigned int, double tel que int n'est pas compris dans double -> unsigned int 
 
 Contrairement aux opérations explicites, les opérations implicites
 vont automatiquement convertir les types selon les instructions de l'OS
@@ -363,8 +384,10 @@ int i = 5, j = 11;
 double x = j / i + .5
 réponse : x = 2.5
 
-
-
+ex6
+cout << 15U / -2LL << endl;
+15 unsigned sera mis en 15 long long
+15LL / 2LL = -7 LL
 
 ## Opérations sur les types
 
@@ -379,6 +402,19 @@ int 5 / int 2 = 2 !!!
 il est possible de faire des opérations d'affectation composée
 +=, -=, /=, %=, *=
 
+## Promotion de type vs Ajustement
+Promotion entière : char/short -> int
+Promotion réelle : float -> double
+
+Les autres conversions sont des ajustements de types qui peuvent potentiellement
+influencer la valeur
+
+
+## Fonctions de manipulation
+*fixed* permet d'afficher un chiffre avec 6 chiffres après la virgule
+*scientific* affichage scientifique avec les e
+*setprecision()* permet de définir le nombre de digits à afficher (après la virgule pour fixed et scientific mais pour tout les digits avec default)
+
 # Incrémentation
 attention au placement de l'incrémentation
 ```C++
@@ -387,7 +423,7 @@ compteur++;     // compteur vaut 43
 ++compteur;     // compteur vaut 44
 int pre = compteur ; // compteur vaut 45
                      // et pre vaut 45
-int post = compteur ++; // compteur vaut 46
+int post = compteur++; // compteur vaut 46
                         // mais post vaut 45
 ```
 
@@ -410,6 +446,25 @@ Pour inclure un module
 
 **cout** -> character output
 **endl** -> end line
+
+
+## Condition et comparaison
+Attention à l'égalité '==' avec les nombres réels
+```
+cout << boolalpha;
+cout << 1.0 / 3.0 << endl; // 0.333333
+cout << (1.0 / 3.0 == 0.333333) << endl; // false
+
+const double EPSILON = 1E-6;
+cout << ( abs(1.0 / 3.0 - 0.333333) < EPSILON ) << endl; // true
+```
+
+La Loi de Morgane est : 
+!(A and B) = (!A or !B)
+!(A or B) = (!A and !B)
+
+un entier 1 = true, 
+un entier 0 = false
 
 ## main
 Tout programme C++ contient une fonction main 
@@ -503,6 +558,192 @@ Le binaire est en base 2
 (-(nombres de possibilités que l'on peut représenter
 en base 2 = N bits à N puisssances 2)-)
 
+
+
+# Conditions
+```C++
+if (condition) {
+
+} else {
+  
+  }
+```
+Le else est optionnel 
+
+il est possible mais NON recommandé de faire un if sur une ligne sans accolades
+(bad practice)
+
+Pour tester plusieurs conditions, utiliser else if
+```C++
+if (condition) {
+
+} else if (condition2) {
+    
+} else {
+
+}
+```
+
+# Boucles
+while
+A une condition d'exécution 
+*tant que* selon valeur boolean 
+
+for
+When you know exactly how many times you want to loop through a block of code, use the for loop instead of a while loop:
+```
+const int COLONNES(5), LIGNES(3);
+const int LARGEUR(3);
+for (int i = 0; i < LIGNES; ++i) {
+for (int j = 0; j < COLONNES; ++j) {
+int ij = j + COLONNES * i;
+cout << setw(LARGEUR) << ij;
+}
+cout << endl;
+}
+
+0 1 2 3 4
+5 6 7 8 9
+10 11 12 13 14
+```
+
+for (initialisation; condition; action) {
+    instruction;
+}
+
+initialisation;
+while (condition) {
+    instruction;
+    action;
+}
+
+for (statement 1; statement 2; statement 3) {
+// code block to be executed
+}
+Statement 1 is executed (one time) before the execution of the code block.
+
+Statement 2 defines the condition for executing the code block.
+
+Statement 3 is executed (every time) after the code block has been executed.
+
+
+# Switch 
+Mettre le default: à la fin, elle peut être mise partout mais good practice de mettre à la fin
+le break permet d'arrêter le switch si case true
+
+les cases sont unique, on ne peut pas dire un case, 1, 2, 3...
+mais case 1; case 2; case 3;
+pas possibilité d'intervalle
+
+si il n'y a pas de break il prend l'information jusquau break même si le case est un default
+
+# Enum
+```C++
+enum JourDeLaSemaine { DIMANCHE, LUNDI, MARDI, MERCREDI, JEUDI, VENDREDI, SAMEDI, DIMANCHE }
+```
+convention de nom pour élément énum = TOUT MAJUSCULE
+
+enum Class
+le nom de l'enum commence par une MAJUSCULE
+
+on ne peut pas attribué la valeur int directement à un enum
+ex jourConge = 1 -> pas possible
+mais 
+    jourConge = DIMANCHE
+    jourConge = joursFerier
+    jourConge = JoursDeLaSemaine(1)
+    jourConge = (JoursDeLaSemaine)1
+    
+
+# Gestion des erreurs d'entrée
+**cin.fail()** -> booléen qui indique si il y'a une erreur
+**cin.clear** -> réinitialise l'indication d'erreur
+**cin.ignore(streamsize n, int delim = EOF)** -> permet de retirer jusqu'à n caractères du flux, ou jusqu
+ce qu'on rencontre le caractère *delim* (par défaut la fin du fichier)
+
+*good* -> true -> pas d'erreur 
+*eof* -> true -> fin de fichier 
+*fail* -> true -> erreur logique sur l'opération entrée/sortie et erreur de lecture/écriture sur opération entrée sortie
+*bad* -> true -> erreur de lecture/écriture sur l'opération entrée sortie
+
+
+# Fonctions
+
+Les paramètres d'une fonction en C++ peuvent se transmettre
+- par valeur (valeurs paramètre transitoire)
+    Les paramètres doivent être typés la même chose que les types de variable adressés
+    on peut faire passer une valeur const typé en paramètre typé sans const, car par valeur
+    ne modifie pas la const avec la même adresse mémoire mais modifie une copie non const
+
+- par référence (valeurs paramètre persistent)
+    se déclare avec '&' en fin de typage de paramètre
+    ```C++
+      void testSwitch(int& a, int& b) {}
+    ```
+    On ne peut pas passer une constante en paramètre par référence
+    le type du paramètre doit être le même que le variable adressée
+    si le type transmis en paramètre n'est pas le même que le type 
+    adressé en référence, il y aura une erreur de compilation, 
+    on ne peut pas passer une constante litérale (genre un type non variablé)
+    ex: 67, 'A', "HELLO" ne peut pas être passé en paramètre référencé, il 
+    faut que ce soit une variable.
+  - par référence constante
+    se fait lorsque le type du paramètre est const et est référencé avec '&'
+    est utile pour les types composés (string, tableaux, classes en paramètres)
+    car permet d'économiser une copie en mémoire est et donc moins gourmand en performance
+    toutefois on ne peut pas modifier la valeur d'une constante
+
+
+# Return
+
+Tout ce qui se trouve après un return ne sera jamais exécuté
+Une fonction qui ne retourne pas de valeur n'est pas obligée de contenier le 
+terme return, l'accolade de fin '}' permet au compilateur de ne rien retourné 
+et de finir l'exécution de la fonction.
+
+Une fonction peut avoir un retour en constexpr pour constexpression
+qui sert à évaluer des valeurs au moment de la compilation
+ce qui optimisera les performances du code
+
+# Référence
+
+Un élément déclarer avec le caractère '&' en fin de type et traités comme référence
+```C++
+int
+main() {
+    int a = 5
+    int& b = a
+    cout << a << " " << b << endl
+    b = 3 
+    cout << a << " " << b << endl
+}
+Va afficher  5 5 puis 3 3 
+car b étant une référence à a, si b ou a est changé, la référence est aussi 
+modifiée
+```
+
+
+# Bad practices but fun to know 
+int i = o
+int ii = (5, 0)
+
+i -> 0
+le 5 sera évalué mais pas attribué
+
+int valeur = (cin << i, i++, i, 9)
+et bien valeur est toujours = 9
+
+
+a = 5, 3
+a = 5
+
+car la différence c'est que c++ le comprend comme ça
+(a = 5), 3
+donc a = 5
+
+alors que a = (5, 3)
+a = 3
+
 ------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
@@ -541,3 +782,23 @@ Pénalités
 - nom de fichier mentioné dans l'en-tête ne correspond pas à la réalité (0.3)
 
 
+# Révisions
+Revoir les cas où c = 0, c-1 = 255 car unsigned char 0 - 1 = 255
+Un char/short est TOUJOURS converti en int implicitement si il travail pas 
+avec des char/short
+si un char travail avec un short, les deux sont converti implicitement en int
+
+Éviter les mêmes noms de variables
+```C++
+int main() {
+    
+    a = 0
+    {   
+        a=0
+        {
+            a = 0
+        }
+    } ... etc pas bien
+
+}
+```

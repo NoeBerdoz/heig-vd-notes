@@ -113,6 +113,47 @@ Un identificateur / nom de variable
 - n'a pas de limite de longeur
 - ne doit pas être un mot réservé C++
 
+### Variables
+Il y'a plusieurs types de variables 
+
+#### extern
+Afin de déclarer une variable globale utilisable au-delà du fichier 
+de déclaration, il est possible de la déclarer avec **extern**.
+
+#### static
+Une variable déclarée **static** permet de créer des variables hybride entre locales
+et globales.
+Contrairement à une variable locale, une variable static est mémorisée même en sortie de fonction
+Cela peut être utile dans le cas par exemple d'un compteur au sein d'une fonction
+```C++
+f();
+void f() {
+    static int compteur;
+    compteur++
+    cout << "appel #"<< compteur << endl;
+}
+
+int main() {
+    for (int i = 0; i < 5; ++i) {
+        f();
+    }
+```
+
+Une variable **static** et **extern** n'est visible que depuis le fichier cpp où elle est déclarée.
+Elle aura un comportement de variable globale, uniquement dans le fichier de déclaration.
+
+#### Méthode d'allocation d'une variable
+En C++ il y'a 3 manières d'allouer de la mémoire pour y stocker des données
+
+- Automatique
+  - pour lees variables locales
+  - existent pendant la durée d'exécution du bloc où elles sont déclarées (aka stack selon Gwenaël)
+- Statique
+  - pour les variables globales, statiques, et les constantes littérales
+  - existent pendant toute la durée du programme 
+- Dynamique 
+  - créées et effacées explicitement par le programmeur avec les instructions **new** et **delete**
+
 ### Constantes
 Certaines valeurs ne changent pas au cours de l'exécution du programme
 Une telle attribution doit être faite par le biais d'une constante
@@ -158,6 +199,7 @@ NUMBER_CONSTEXPR
 ````
 
 # Types
+
 bool
 fait 1 bit, sois 1 sois 0
 
@@ -668,6 +710,22 @@ ce qu'on rencontre le caractère *delim* (par défaut la fin du fichier)
 
 
 # Fonctions
+La déclaration d'une fonction en C++ se fait par son prototype, le prototype démontre les paramètres de la fonction.  
+La fonction est définie dans un deuxième temps après sa déclaration.
+
+```C++
+int f(int val); // déclaration = prototype
+
+int main() {
+    int a = f(0);
+}
+
+int f(int val) {  // définition
+    return val + 42;
+}
+```
+Ce qui est obligatoire pour la déclaration d'une fonction est le type des paramètres et l'ordre de ceux-ci
+
 
 Les paramètres d'une fonction en C++ peuvent se transmettre
 - par valeur (valeurs paramètre transitoire)
@@ -692,7 +750,6 @@ Les paramètres d'une fonction en C++ peuvent se transmettre
     est utile pour les types composés (string, tableaux, classes en paramètres)
     car permet d'économiser une copie en mémoire est et donc moins gourmand en performance
     toutefois on ne peut pas modifier la valeur d'une constante
-
 
 # Return
 
@@ -721,6 +778,7 @@ Va afficher  5 5 puis 3 3
 car b étant une référence à a, si b ou a est changé, la référence est aussi 
 modifiée
 ```
+
 
 
 # Bad practices but fun to know 

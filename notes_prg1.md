@@ -751,6 +751,24 @@ Les paramètres d'une fonction en C++ peuvent se transmettre
     car permet d'économiser une copie en mémoire est et donc moins gourmand en performance
     toutefois on ne peut pas modifier la valeur d'une constante
 
+    
+## Surcharge de fonction
+Surcharger une fonction est le principe d'utiliser le même nom de celle-ci 
+mais en distinguant les paramètres.
+Le compilateur choisira la fonction à utiliser.
+
+Toutefois les éléments suivants ne permettent pas de définir une surcharge de fonction :
+- Le type de retour
+- Les valeurs par défaut des paramètres
+- La présence d'un const pour un paramètre passé par valeur
+    
+On peut surcharger une fonction en faisant varier le type de passage d'un paramètre : 
+- Par valeur
+- Par référence
+- Par référence constante
+
+Attention, il ne faut jamais faire une surcharge par valeur et une autre par référence
+
 # Return
 
 Tout ce qui se trouve après un return ne sera jamais exécuté
@@ -779,7 +797,37 @@ car b étant une référence à a, si b ou a est changé, la référence est aus
 modifiée
 ```
 
+# assert
+Lorsque il faut stopper l'exécution d'un code suite à des conditions non remplie, il est possible de déclarer un *assert*
 
+**false** -> écrit un message dans *cerr* et termine le programme avec abort
+**true** -> ne fait rien
+    
+```C++
+#include <cassert>
+char intToHexa(int value) {
+    // arrêt si pas convertible
+    assert(value >= 0 and value <= 15);
+    
+    if (value < 10) // '0' - '9'
+        return char('0' + value);
+    else // 'a' - 'f'
+        return char('a' + value - 10);
+}
+```
+
+Le assert doit être utilisé en phase de développement, 
+Sa déclaration permet de gérer des erreurs de programmation et non d'exécution   
+ 
+Il peut être désactivé avec la macro **NDEBUG**
+```C++
+#define NDEBUG
+...
+#include <cassert>
+...
+```
+    
+ 
 
 # Bad practices but fun to know 
 int i = o

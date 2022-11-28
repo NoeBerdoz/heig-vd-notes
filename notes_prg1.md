@@ -887,6 +887,35 @@ Pénalités
 - Utilisation d'éléments non vu en théorie (0.5pts)
 - nom de fichier mentioné dans l'en-tête ne correspond pas à la réalité (0.3)
 
+# Algorithmes de tris
+
+## Bubble sort / Tri à bulles
+-> Compare deux éléments et les permutes si ils ne sont pas bien ordonnés
+1, 2, 4, 3, 5, 6
+
+1 -> 2 OK, 2 -> 4 pas ok, 2 -> 3 OK, 3 -> 4 OK, 4 -> 5 OK 5 -> 6 OK
+output: 1, 2, 3, 4 , 5, 6
+
+Pseudo code :
+```C++
+Step 1: For i = 0 to N-1 repeat Step 2
+Step 2: For J = i + 1 to N – I repeat
+              Step 3: if A[J] > A[i]
+              Swap A[J] and A[i]
+              [End of Inner for loop]
+              [End if Outer for loop]
+Step 4: Exit
+```
+
+si 1, 4, 3, 2, 5, 6
+il va falloir plusieurs itérations pour trier
+
+La valeur mathématique d'un bubble sort est O(n^2)
+
+## Insertion Sort
+Fonctionne comme le bubble mais au lieu d'effectuer une réitération après contrôle, 
+on ajout une boucle while qui vient directement placer l'élément à sa place selon l'état
+
 
 # Révisions
 Revoir les cas où c = 0, c-1 = 255 car unsigned char 0 - 1 = 255

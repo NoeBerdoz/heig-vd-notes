@@ -117,6 +117,10 @@ Un identificateur / nom de variable
 Il y'a plusieurs types de variables 
 
 #### extern
+Pour déclarer une variable globale, il faut le faire dans un fichier header '.h'
+toutefois si la variable est déclarée classiquement, elle sera exécutée à chaque include, 
+ce qui créera un conflit de valeurs dupliquées pour une même variable.
+
 Afin de déclarer une variable globale utilisable au-delà du fichier 
 de déclaration, il est possible de la déclarer avec **extern**.
 
@@ -726,6 +730,7 @@ int f(int val) {  // définition
 ```
 Ce qui est obligatoire pour la déclaration d'une fonction est le type des paramètres et l'ordre de ceux-ci
 
+C'est uniquement dans la déclaration d'une fonction que l'on peut attribuer une valeur par défaut aux paramètre. 
 
 Les paramètres d'une fonction en C++ peuvent se transmettre
 - par valeur (valeurs paramètre transitoire)
@@ -750,6 +755,24 @@ Les paramètres d'une fonction en C++ peuvent se transmettre
     est utile pour les types composés (string, tableaux, classes en paramètres)
     car permet d'économiser une copie en mémoire est et donc moins gourmand en performance
     toutefois on ne peut pas modifier la valeur d'une constante
+
+    
+## Surcharge de fonction
+Surcharger une fonction est le principe d'utiliser le même nom de celle-ci 
+mais en distinguant les paramètres.
+Le compilateur choisira la fonction à utiliser.
+
+Toutefois les éléments suivants ne permettent pas de définir une surcharge de fonction :
+- Le type de retour
+- Les valeurs par défaut des paramètres
+- La présence d'un const pour un paramètre passé par valeur
+    
+On peut surcharger une fonction en faisant varier le type de passage d'un paramètre : 
+- Par valeur
+- Par référence
+- Par référence constante
+
+Attention, il ne faut jamais faire une surcharge par valeur et une autre par référence
 
 # Return
 
@@ -779,6 +802,242 @@ car b étant une référence à a, si b ou a est changé, la référence est aus
 modifiée
 ```
 
+# assert
+Lorsque il faut stopper l'exécution d'un code suite à des conditions non remplie, il est possible de déclarer un *assert*
+
+**false** -> écrit un message dans *cerr* et termine le programme avec abort
+**true** -> ne fait rien
+    
+```C++
+#include <cassert>
+char intToHexa(int value) {
+    // arrêt si pas convertible
+    assert(value >= 0 and value <= 15);
+    
+    if (value < 10) // '0' - '9'
+        return char('0' + value);
+    else // 'a' - 'f'
+        return char('a' + value - 10);
+}
+```
+
+Le assert doit être utilisé en phase de développement, 
+Sa déclaration permet de gérer des erreurs de programmation et non d'exécution   
+ 
+Il peut être désactivé avec la macro **NDEBUG**
+```C++
+#define NDEBUG
+...
+#include <cassert>
+...
+```
+
+
+# Tableaux classiques
+
+les tableaux classique se déclarent s'implement avec []
+
+type nom[capacité]
+
+Les tableaux classiques sont limités,
+leur capacité est constante et doit être déclarée
+Il faut stocker cette capacité dans une variable annexe
+On ne peut pas retourner un tableau classique depuis une fonction 
+Il n'y a pas de contrôle sur les bornes d'accès
+
+    
+# Function algorithmique
+#include <algorithm>
+[Documentation en ligne](https://fr.cppreference.com/w/cpp/algorithm)
+
+distance(v.begin, v.end)
+retourne le nombre d'élément entre begin et end, end compris
+
+la librairie algorithme n'a pas accès au vecteur mais uniquement a ses éléments par itérations
+Si il faut modifier la capacité du vecteur, il faut le faire avec les fonctions prédisposée à modifier le vecteur:
+- transform()
+- fill() / generate()
+- copy()
+- remove()
+- replace()
+- reverse() / rotate() / shuffle()
+- sort()
+...
+
+<iterator>
+pour traiter la valeur d'un iterateur il faut ajouter un '*' au début
+par exemple min_element -> *min_element
+
+# Algorithmes de tris
+
+## Bubble sort / Tri à bulles
+-> Compare deux éléments et les permutes si ils ne sont pas bien ordonnés
+1, 2, 4, 3, 5, 6
+
+1 -> 2 OK, 2 -> 4 pas ok, 2 -> 3 OK, 3 -> 4 OK, 4 -> 5 OK 5 -> 6 OK
+output: 1, 2, 3, 4 , 5, 6
+
+Pseudo code :
+```C++
+Step 1: For i = 0 to N-1 repeat Step 2
+Step 2: For J = i + 1 to N – I repeat
+              Step 3: if A[J] > A[i]
+              Swap A[J] and A[i]
+              [End of Inner for loop]
+              [End if Outer for loop]
+Step 4: Exit
+```
+
+si 1, 4, 3, 2, 5, 6
+il va falloir plusieurs itérations pour trier
+
+La valeur mathématique d'un bubble sort est O(n^2)
+
+## Insertion Sort
+Fonctionne comme le bubble mais au lieu d'effectuer une réitération après contrôle,
+on ajout une boucle while qui vient directement placer l'élément à sa place selon l'état
+
+# Fonctions String
+#include <string>
+
+initialisation d'un string
+```C++
+string hello ("Hello, World!"); // contient "Hello, World!"
+string world (hello, 7 ); // contient "World!"
+string hello2 ("Hello, World!", 7 ); // contient "Hello, "
+string world2( string("Hello, World!"), 7 ); // contient "World!"
+```
+
+int tolower(int c);
+int toupper(int c);
+retourne minuscule ou majuscule
+si la transformation n'est pas possible retournent le caractère original inchanché
+
+un string peur remplacer un vector<char>
+mais un vector<char> n'a pas autant de fonctionnalité qu'un string
+
+```C++
+string s1 = "Hello";
+string s2(s1); // = "Hello"
+string s3("Hello");
+string s4{"Hello"};
+
+// Autres constructeurs
+string s1 = "Bienvenue";
+string s2(s1.begin()+4, s1.begin()+8); // "venu"
+string s(6, ' a'); // "aaaaaa"
+
+// pas de valeur par default contrairement à vector
+string s(6); // erreur de syntaxe
+
+// Encore un exemple:
+string hello("Hello, World!"); // contient "Hello, World!"
+string hell  (hello, 0, 4);   // contient la chaîne "Hell" string world (hello, 7, 5);   // 
+contient la chaîne "World" string world2(hello, 7);     // contient la chaîne "World!"
+string hello2(hello);      // contient la chaîne "Hello, World!"
+
+```
+
+Il y'a des fonctions qui peuvent être utilisé pour travailler sur les strings
+
+```C++
+    string s1 = "ABC";
+    string s2 = s1[1]; // ERROR, le constructeur string ne peut pas gérer ça
+    // il faut le faire comme ça :
+    string s2;
+    s2 = s1[1]; // ici c'est good car le string a été déclaré avant
+    
+    // et on ne peut pas faire ça
+    string s1 = 'B'; // ERROR car c'est un char
+```
+
+## replace(pos, len, str)
+```C++
+cout <<"my_string before replace() -> " << my_string << endl;
+
+my_string.replace(1, 8, one_string);
+
+cout << my_string << endl;
+// là = HPancakeso World! 
+// car va ajouter au index 1 Pancakes et va ensuite va remplacer/écraser les 3 lettres après index 1
+```
+
+## clear()
+Vide la chaîne 
+
+## erase(pos, len)
+Va supprimer des éléments selon une position donnée 
+```C++
+string str("This is an example sentence.");
+str.erase(9, 9);  // "This is a sentence." -> supprime 9 élément à partir de l'index 9
+str.erase(13);   // "This is a sen" -> supprime tout ce qu'il y'a à partir de l'index 13 jusqu'à la fin
+str.erase();    // "" -> revient à faire un clear()
+
+```
+
+## Recherche
+- find -> Trouve un sous-chaîne
+- rfind -> Idem depuis la fin
+- find_first_of(strings à chercher, à partir de l'index dans le string à chercher) -> Trouve le premier caractère parmi une liste
+- find_last_of -> Idem depuis la fin
+- find_first_not_of -> Trouve le premier caractère hors d'une liste
+- find_last_not_of -> idem depuis la fin
+
+Ses méthodes renvoient la position trouvée de type **size_t**
+Si la recherche ne trouve rien elles renvoient **-1** en tant que size_t qui est unsigned donc va renvoyer le numeric_limits<size_t>::max
+```C++
+ 
+find_first_of("Good Bye!", 0 , 4); // Ici va chercher selon 'Good'
+```
+
+# Entrée sortie utilisateur
+cin permet de rentrer in string
+cout d'afficher
+cerr afficher les erreur
+clog afficher les logs
+
+getline(flux, str) pour prendre en input une ligne entière, en gros un cin avec les espaces compris
+
+il est possible de convertir des string à des nombres
+- stoi() -> string to integer
+- stol -> string to long
+- stoul -> string to unsigned long
+- stoll -> string to long long
+- stoull -> string to unsigned long long
+
+Et inversement de nombre à string avec *to_string()*
+
+# Classes et objets
+
+En C++ lorsque l'on déclare une classe ne pas oublier le *;* après le close tag *}*
+
+Pour créer une classe, il faut créer un fichier nom_classe.h
+```C++
+#ifndef INC_7_4_ROBOT_ROBOT_H
+#define INC_7_4_ROBOT_ROBOT_H
+
+
+class Robot {
+
+};
+
+
+#endif 
+```
+
+Un fichier nom_classe.cpp
+```C++
+#include "Robot.h"
+
+```
+
+le mot clé *this* permet de faire référence aux éléments de la classe en question
+Il faut l'utiliser seulement lorsqu'il permet d'éviter des confusions
+
+une méthode en const ex *double surface() const* indique par son *const* qu'aucune 
+donnée de la classe sera modifiée par cette même méthode
+
+``````
 
 
 # Bad practices but fun to know 

@@ -802,6 +802,63 @@ donc a = 5
 alors que a = (5, 3)
 a = 3
 
+# Tableaux 
+En gros c'est des tableaux array mais sans fonction native, 
+ce sont des tableaux comme en C
+
+un tableau en paramètre est nativement passé en référence
+
+# Vectors
+Il faut faire un include pour utiliser les vectors
+#include <vector>
+https://dev-notes.eu/2018/02/introduction-to-vectors-in-c++/
+
+
+rbegin() rend() = reversebegin reverseend
+cbegin() cend() = constbegin constend
+
+le .end() sort du scope du vector, il prend la taille de vecteur + 1, 
+donc pour atteindre la dernière valeur du vecteur il faut faire .end() - 1
+
+push_back() -> place un élément à la fin du vecteur
+pop_back -> retire un élément à la fin du vecteur
+Structure LIFO last in first out (donc pas FIFO first in first out)
+
+erase(parm1, parm2) supprime les positions >= param 1 et  position < param2, mais pas param2 compris
+vector.insert(position, nombre de fois, élément) ou vector.insert(position, élément)
+
+On peut créer des vecteurs de plusieurs dimensions
+avec des vecteurs dans des vecteurs.
+
+vector<vector<int>> V2D(3, vector<int>(4));
+
+On peut accéder à la size d'un vecteur avec vector_name.size();
+la size est le nomre d'éléments (lignes) dans la liste
+vector<vector<int>> v2D(4, vector<int>(2,5));
+v2D.size() // sera égal à 4
+et l'output 
+55
+55
+55
+55
+
+# Array
+le type Array est un tableau qui se différencie du tableau classic en C 
+car un array a des fonctions natives
+
+On passe le type et ensuite le nombre d'éléments
+array<array<int, 3>, 2> arrInt2D = {
+arrInt2D fait 2 lignes et 3 colonnes
+
+# Using
+Keyword qui permet de créer un alias 
+using Pomme = int;
+Pomme test = 1; // Pomme alias à int
+
+# Type auto
+python like
+auto blabla:
+
 ------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------

@@ -117,8 +117,12 @@ Un identificateur / nom de variable
 Il y'a plusieurs types de variables 
 
 #### extern
+Pour déclarer une variable globale, il faut le faire dans un fichier header '.h'
+toutefois si la variable est déclarée classiquement, elle sera exécutée à chaque include, 
+ce qui créera un conflit de valeurs dupliquées pour une même variable.
+
 Afin de déclarer une variable globale utilisable au-delà du fichier 
-de déclaration, il est possible de la déclarer avec **extern**.
+de déclaration, il faut la déclarer avec **extern**
 
 #### static
 Une variable déclarée **static** permet de créer des variables hybride entre locales
@@ -726,6 +730,7 @@ int f(int val) {  // définition
 ```
 Ce qui est obligatoire pour la déclaration d'une fonction est le type des paramètres et l'ordre de ceux-ci
 
+C'est uniquement dans la déclaration d'une fonction que l'on peut attribuer une valeur par défaut aux paramètre. 
 
 Les paramètres d'une fonction en C++ peuvent se transmettre
 - par valeur (valeurs paramètre transitoire)
@@ -826,6 +831,20 @@ Il peut être désactivé avec la macro **NDEBUG**
 #include <cassert>
 ...
 ```
+
+
+# Tableaux classiques
+
+les tableaux classique se déclarent s'implement avec []
+
+type nom[capacité]
+
+Les tableaux classiques sont limités,
+leur capacité est constante et doit être déclarée
+Il faut stocker cette capacité dans une variable annexe
+On ne peut pas retourner un tableau classique depuis une fonction 
+Il n'y a pas de contrôle sur les bornes d'accès
+
     
 # Function algorithmique
 #include <algorithm>
